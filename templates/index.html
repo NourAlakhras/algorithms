@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subarray Sum Finder</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <form method="post">
+            <div class="form-group">
+                <label for="numberArray">Enter an array of numbers (comma-separated):</label>
+                <input type="text" class="form-control" id="numberArray" name="numberArray" required />
+            </div>
+
+            <div class="form-group">
+                <label for="subarraySize">Enter the number of elements in each subarray:</label>
+                <input type="number" class="form-control" id="subarraySize" name="subarraySize" required />
+            </div>
+
+            <div class="form-group">
+                <label for="algorithm">Select the algorithm:</label>
+                <select class="form-control" id="algorithm" name="algorithm" required>
+                    <option value="bruteforce">Brute Force Algorithm</option>
+                    <option value="divideandconquer">Divide and Conquer Algorithm</option>
+                    <option value="dynamicprogramming">Dynamic Programming Algorithm</option>
+                    <option value="greedy">Greedy Algorithm</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div id="result" style="display: none;">
+            {% if result %}
+                <h4>Result:</h4>
+                <p>{{ result | join(', ') }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        // If there is a result, update the result div
+        {% if result %}
+            document.getElementById('result').style.display = 'block';
+        {% endif %}
+    </script>
+</body>
+
+</html>
