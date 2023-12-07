@@ -1,6 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,jsonify
+import time
+import random
 
 app = Flask(__name__)
+
+def generate_array(n, min_value=-100, max_value=100):
+    # Generate an array of n random integers between min_value and max_value
+    return [random.randint(min_value, max_value) for _ in range(n)]
+
+
 
 def brute_force(arr):
     n = len(arr)
@@ -27,7 +35,7 @@ def divide_and_conquer(arr, low, high):
     mid = (low + high) // 2
 
     # Recursively find the maximum subarray sum in the left and right halves O(n/2)
-    left_sum, left_subarray= divide_and_conquer(arr, low, mid)
+    left_sum, left_subarray = divide_and_conquer(arr, low, mid)
     right_sum, right_subarray = divide_and_conquer(arr, mid + 1, high)
 
     # Find the maximum subarray sum that crosses the midpoint (Merging O(n))
@@ -35,11 +43,12 @@ def divide_and_conquer(arr, low, high):
 
     # Return the result with the maximum sum
     if left_sum >= right_sum and left_sum >= crossing_sum:
-        return left_subarray, left_sum
+        return left_sum, left_subarray
     elif right_sum >= left_sum and right_sum >= crossing_sum:
-        return right_subarray, right_sum
+        return right_sum, right_subarray
     else:
-        return  crossing_sum,crossing_subarray
+        return crossing_sum, crossing_subarray
+
 
 def max_crossing_sum(arr, low, mid, high):
     left_sum = float('-inf')
@@ -108,24 +117,84 @@ def kadane_dynamic_programming(arr):
     subarray = arr[start:end + 1]
     return maxsumSoFar, subarray
 
+def time_it(func, *args):
+    start_time = time.time()
+    result = func(*args)
+    end_time = time.time()
+    elapsed_time = (end_time - start_time) * 1000  # Convert to milliseconds
+    return result, elapsed_time
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     result = None
+    elapsed_time = None
+    elapsed_time_formatted=None
 
     if request.method == 'POST':
-        print(request.form)  # Print the entire form data
         arr = list(map(int, request.form.get('arr', '').split(',')))
-        print(arr)  # Print the parsed array
 
-                
         match request.form['algorithm']:
-            case 'bruteforce': result = brute_force(arr)
-            case 'divideandconquer': result = divide_and_conquer(arr, 0, len(arr) - 1)
-            case 'dynamicprogramming': result = classical_Dynamic_programming(arr)
-            case 'kaden':  result = kadane_dynamic_programming(arr)
+            case 'bruteforce':
+                result, elapsed_time = time_it(brute_force, arr)
+            case 'divideandconquer':
+                result, elapsed_time = time_it(divide_and_conquer, arr, 0, len(arr) - 1)
+            case 'dynamicprogramming':
+                result, elapsed_time = time_it(classical_Dynamic_programming, arr)
+            case 'kaden':
+                result, elapsed_time = time_it(kadane_dynamic_programming, arr)
 
-    return render_template('index.html', result=result)
+        # Format the elapsed time with up to 30 decimals
+        elapsed_time_formatted = "{:.75f}".format(elapsed_time)
+
+
+
+        print(elapsed_time_formatted)  # This is a formatted string
+
+    return render_template('index.html', result=result, elapsed_time=elapsed_time_formatted)
+
+
+
+
+
+
+
+@app.route('/generate_and_run', methods=['GET', 'POST'])
+def generate_and_run():
+    if request.method == 'GET':
+        return render_template('generate_and_run.html')
+
+    try:
+        n = request.form.get('array_size')
+        n = int(n)
+
+        if n <= 0:
+            return jsonify({'error': 'Invalid input. n should be a positive integer.'}), 400
+
+        algorithm = request.form.get('algorithm')
+
+        arr = generate_array(n)
+
+        start_time = time.time()
+
+        # Execute the selected algorithm
+        match algorithm:
+            case 'bruteforce':
+                result, elapsed_time = time_it(brute_force, arr)
+            case 'divideandconquer':
+                result, elapsed_time = time_it(divide_and_conquer, arr, 0, len(arr) - 1)
+            case 'dynamicprogramming':
+                result, elapsed_time = time_it(classical_Dynamic_programming, arr)
+            case 'kaden':
+                result, elapsed_time = time_it(kadane_dynamic_programming, arr)
+            case _:
+                return jsonify({'error': 'Invalid algorithm selected.'}), 400
+
+        elapsed_time_formatted = "{:.75f}".format(elapsed_time)
+
+        return render_template('generate_random.html',arr=arr, result=result, elapsed_time=elapsed_time_formatted)
+    except ValueError:
+        return jsonify({'error': 'Invalid input. n should be a positive integer.'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

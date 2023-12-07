@@ -1,45 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Max Sum Finder</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-</head>
 
+    <title>Time Elapsed</title>
+</head>
 <body>
     <div class="container mt-5">
         <header class="d-flex justify-content-between align-items-center">
             <div>
-                <h1>Maximum Sum Subarray</h1>
+                <h1>Exploring with Random Arrays</h1>
             </div>
         
             <div>
-                <a class="btn btn-primary" href="/generate_and_run">Generate random arrays</a>
+                <a class="btn btn-primary" href="/">Give your own array</a>
             </div>
         </header>
         <hr>
 
-        <form method="post">
+
+        <form method="post" action="/generate_and_run">
             <div class="form-group">
-                <label for="arr">Enter an array of numbers (comma-separated):</label>
-                <textarea class="form-control" id="arr" name="arr" rows="3" required></textarea>
+                <label for="array_size">Enter the size of the array (n):</label>
+                <input class="form-control" type="number" id="array_size" name="array_size" required min="1">
             </div>
             <div class="form-group">
-                <label for="algorithm">Select the algorithm:</label>
+                <label for="algorithm">Select an algorithm:</label>
                 <select class="form-control" id="algorithm" name="algorithm" required>
-                    <option value="bruteforce">Brute Force Algorithm</option>
-                    <option value="divideandconquer">Divide and Conquer Algorithm</option>
-                    <option value="dynamicprogramming">Classical Dynamic Programming Algorithm</option>
-                    <option value="kaden">Kadane's Dynamic Programming Algorithm</option>
+                    <option value="bruteforce">Brute Force</option>
+                    <option value="divideandconquer">Divide and Conquer</option>
+                    <option value="dynamicprogramming">Dynamic Programming</option>
+                    <option value="kaden">Kadane's Algorithm</option>
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" >Submit</button>
         </form>
         <hr>
         <br>
+        <div id="arr">
+            {% if result %}
+                <h4>Generated Random array:</h4>
+                <p>{{ arr }}</p>
+            {% endif %}
+        </div>
         <div id="sum">
             {% if result %}
                 <h4>Maximum Sum:</h4>
@@ -62,9 +68,6 @@
             <p> {{ elapsed_time }} milliseconds</p>
             {% endif %}
         </div>
-
     </div>
-
 </body>
-
 </html>
