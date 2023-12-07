@@ -4,42 +4,54 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Subarray Sum Finder</title>
+    <title>Max Sum Finder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
 </head>
 
 <body>
     <div class="container mt-5">
+        <header>
+            <h1>Maximum Sum Subarray 
+            </h1>
+            <hr>
+        </header>
+
         <form method="post">
             <div class="form-group">
-                <label for="numberArray">Enter an array of numbers (comma-separated):</label>
-                <input type="text" class="form-control" id="numberArray" name="numberArray" required />
+                <label for="arr">Enter an array of numbers (comma-separated):</label>
+                <input type="text" class="form-control" id="arr" name="arr" required />
             </div>
-
-            <div class="form-group">
-                <label for="subarraySize">Enter the number of elements in each subarray:</label>
-                <input type="number" class="form-control" id="subarraySize" name="subarraySize" required />
-            </div>
-
             <div class="form-group">
                 <label for="algorithm">Select the algorithm:</label>
                 <select class="form-control" id="algorithm" name="algorithm" required>
                     <option value="bruteforce">Brute Force Algorithm</option>
                     <option value="divideandconquer">Divide and Conquer Algorithm</option>
-                    <option value="dynamicprogramming">Dynamic Programming Algorithm</option>
-                    <option value="greedy">Greedy Algorithm</option>
+                    <option value="dynamicprogramming">Classical Dynamic Programming Algorithm</option>
+                    <option value="kaden">Kadane's Dynamic Programming Algorithm</option>
                 </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-        <div id="result">
+        <br>
+        <div id="sum">
             {% if result %}
-                <h4>Result:</h4>
-                <p>{{ result | join(', ') }}</p>
+                <h4>Maximum Sum:</h4>
+                <p>{{ result[0] }}</p>
             {% endif %}
         </div>
+        <div id="subarray">
+            {% if result %}
+                <h4>Subarray:</h4>
+                {% if result[1] is iterable %}
+                    <p>{{ result[1] | join(', ') }}</p>
+                {% else %}
+                    <p>{{ result[1] }}</p>
+                {% endif %}
+            {% endif %}
+        </div>
+
+
     </div>
 
 </body>
