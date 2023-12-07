@@ -42,6 +42,8 @@ This Flask web application helps you find the maximum sum subarray using various
 - **.gitignore:** Gitignore file to exclude the virtual environment.
 
 ## Contributors
-- [Nour Al Akhras – 220410351@psu.edu.sa]
-- [Haifa Zain Eddin – 220410581@psu.edu.sa]
+| Name         | Email               |
+| ------------ | ------------------- |
+| Haifa Zain Eddin   | 220410581@psu.edu.sa|
+| Nour Al Akhras | 220410351@psu.edu.sa|
 - ...
